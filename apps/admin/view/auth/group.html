@@ -1,0 +1,122 @@
+{include file="public:header" /}
+{include file="public:nav" /}
+<div class="main-content">
+    <div class="main-content-inner">
+        <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+            <ul class="breadcrumb">
+                <li>
+                    <i class="ace-icon fa fa-home home-icon"></i>
+                    <a href="#">首页</a>
+                </li>
+
+                <li>
+                    <a href="#">权限管理</a>
+                </li>
+                <li class="active">用户组列表</li>
+            </ul><!-- /.breadcrumb -->
+
+            <div class="nav-search" id="nav-search">
+                <form class="form-search">
+								<span class="input-icon">
+									<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
+									<i class="ace-icon fa fa-search nav-search-icon"></i>
+								</span>
+                </form>
+            </div><!-- /.nav-search -->
+        </div>
+
+        <div class="page-content">
+            <div class="page-header">
+                <h1>
+                    权限管理
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        用户组列表
+                    </small>
+                </h1>
+            </div><!-- /.page-header -->
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- PAGE CONTENT BEGINS -->
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <table id="simple-table" class="table  table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>用户组</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {volist name="list" id="vo"}
+                                <tr>
+                                    <td>{$vo.id}</td>
+                                    <td>{$vo.title}</td>
+                                    <td>
+                                        {if condition="$vo.status eq 1"}
+                                        已启用
+                                        {else/}
+                                        已禁用
+                                        {/if}
+                                    <td>
+                                        <div class="hidden-sm hidden-xs btn-group">
+                                            <a href="{:url('Auth/groupSetRules',array('gid' => $vo.id))}" class="{if condition='$vo.id eq 1'}disabled{/if} btn btn-sm btn-info">设置权限</a>
+                                            <a href="{:url('Auth/groupEdit',array('gid' => $vo.id))}" class="{if condition='$vo.id eq 1'}disabled{else/}edit{/if} btn btn-sm btn-info">编辑</a>
+                                            {if condition="$vo.status eq 1"}
+                                            <a href="javascript:;" class="{if condition='$vo.id eq 1'}disabled{/if} set_status btn btn-sm btn-info" gid="{$vo.id}" status="0">禁用</a>
+                                            {else/}
+                                            <a href="javascript:;" class="{if condition='$vo.id eq 1'}disabled{/if} set_status btn btn-sm btn-info" gid="{$vo.id}" status="1">启用</a>
+                                            {/if}
+                                        </div>
+                                    </td>
+                                </tr>
+                                {/volist}
+                                </tbody>
+                            </table>
+                            {$list->render()}
+                        </div><!-- /.span -->
+                    </div><!-- /.row -->
+                    <!-- PAGE CONTENT ENDS -->
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.page-content -->
+    </div>
+</div>
+{include file="public:footer" /}
+<script>
+    $(function(){
+        //禁用/启用
+        $('.set_status').click(function(){
+            var gid = $(this).attr('gid');
+            var sta = $(this).attr('status');
+            var msg = '';
+            if(sta == 1)
+            {
+                msg = '确定要启用该用户组？';
+            }else{
+                msg = '确定要禁用该用户组？';
+            }
+            layer.msg(msg,{
+                time:0,
+                btn:['确定','取消'],
+                yes:function (index) {
+                    layer.close(index);
+                    $.get("{:url('/admin/Auth/groupSetStatus/id/" + gid + "/sta/" + sta +"')}",function(data){
+                        if(data.code == 1)
+                        {
+                            layer.msg(data.msg);
+                            setTimeout(function(){
+                                window.location.href = data.url;
+                            },200);
+                        }else{
+                            layer.msg(data.msg);
+                        }
+                    },'json');
+                }
+            });
+        });
+    });
+</script>

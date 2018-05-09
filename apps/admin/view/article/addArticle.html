@@ -1,0 +1,110 @@
+{include file="public:header" /}
+{include file="public:nav" /}
+<div class="main-content">
+    <div class="main-content-inner">
+        <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+            <ul class="breadcrumb">
+                <li>
+                    <i class="ace-icon fa fa-home home-icon"></i>
+                    <a href="#">首页</a>
+                </li>
+
+                <li>
+                    <a href="#">文章管理</a>
+                </li>
+                <li class="active">添加文章</li>
+            </ul><!-- /.breadcrumb -->
+
+            <div class="nav-search" id="nav-search">
+                <form class="form-search">
+					<span class="input-icon">
+						<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
+						<i class="ace-icon fa fa-search nav-search-icon"></i>
+					</span>
+                </form>
+            </div><!-- /.nav-search -->
+        </div>
+
+        <div class="page-content">
+            <div class="page-header">
+                <h1>
+                    文章管理
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        添加文章
+                    </small>
+                </h1>
+            </div><!-- /.page-header -->
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- PAGE CONTENT BEGINS -->
+                    <div class="form-horizontal" role="form" id="form">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">文章标题:</label>
+                            <div class="col-sm-9">
+                                <input name="title" type="text" placeholder="请输入文章标题" class="col-xs-10 col-sm-5" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">文章分类:</label>
+                            <div class="col-sm-9">
+                                <select class="col-sm-5 cate_change">
+                                    <option value="-1">选择分类</option>
+                                    {volist name="cate" id="vo"}
+                                        <option value="{$vo.id}">{$vo.name}</option>
+                                    {/volist}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">内&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;容:</label>
+                            <div class="col-sm-9">
+                                <script type="text/plain" id="editor" style="width:800px;height:300px;"></script>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-sm-offset-3">
+                            <button class="submit btn btn-info" type="button">提交</button>
+                        </div>
+                    </div>
+                    <!-- PAGE CONTENT ENDS -->
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.page-content -->
+    </div>
+</div>
+{include file="public:footer" /}
+{include file="public:formAjaxSubmit"}
+<script>
+
+    //实例化编辑器
+    var um = UM.getEditor('editor');
+
+    formAjaxSubmit("{:url('Article/addArticle')}");
+    $(function(){
+        $('.cate_change').bind('change',function(){
+                var pid  = this.options[this.options.selectedIndex].value;
+                //console.log(pid);
+                var div  = $(this).parents('.form-group');
+                var str = "<div class='form-group select'>" +
+                    "<label class='col-sm-3 control-label no-padding-right'>选择子分类:</label>" +
+                    " <div class='col-sm-9'>" +
+                    "<select name='cate_id' class='cate_change col-xs-10 col-sm-5'>";
+                $.get("{:url('/admin/Article/getChildCategory/pid/"+ pid +"')}",function(data){
+                    console.log($(div).parent('#form').find('.select').remove());
+                    console.log(data);
+                    if(data.code == 1)
+                    {
+                        for(var i=0;i < data.cate.length;i++)
+                        {
+                            str +="<option value='"+data.cate[i].id+"'>"+data.cate[i].name+"</option>";
+                        }
+                        //console.log(str);
+                        str +="</select></div></div>";
+                        //console.log(div);
+                        $(div).after(str);
+                    }
+                },'json');
+        });
+    });
+</script>

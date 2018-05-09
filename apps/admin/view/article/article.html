@@ -1,0 +1,112 @@
+{include file="public:header" /}
+{include file="public:nav" /}
+<div class="main-content">
+    <div class="main-content-inner">
+        <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+            <ul class="breadcrumb">
+                <li>
+                    <i class="ace-icon fa fa-home home-icon"></i>
+                    <a href="#">首页</a>
+                </li>
+
+                <li>
+                    <a href="#">文章管理</a>
+                </li>
+                <li class="active">文章列表</li>
+            </ul><!-- /.breadcrumb -->
+
+            <div class="nav-search" id="nav-search">
+                <form class="form-search">
+								<span class="input-icon">
+									<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
+									<i class="ace-icon fa fa-search nav-search-icon"></i>
+								</span>
+                </form>
+            </div><!-- /.nav-search -->
+        </div>
+
+        <div class="page-content">
+            <div class="page-header">
+                <h1>
+                    文章管理
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        文章列表
+                    </small>
+                </h1>
+            </div><!-- /.page-header -->
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- PAGE CONTENT BEGINS -->
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <table id="simple-table" class="table  table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>文章标题</th>
+                                    <th>文章内容</th>
+                                    <th>文章分类</th>
+                                    <th>标签</th>
+                                    <th>是否显示</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {volist name="list" id="vo"}
+                                <tr>
+                                    <td>{$vo.title}</td>
+                                    <td>{$vo.content}</td>
+                                    <td>{$vo.category}</td>
+                                    <td>{$vo.tag}</td>
+                                    <td>
+                                        {if condition="$vo.is_show eq 1"}
+                                        是
+                                        {else/}
+                                        否
+                                        {/if}
+                                    </td>
+                                    <td>
+                                        <a href="{:url('Menu/navEdit',array('cid' => $vo.id))}" class="btn btn-sm btn-info">编辑</a>
+                                        <a href="javascript:;" class="del btn btn-sm btn-info" cid="{$vo.id}">删除</a>
+                                    </td>
+                                </tr>
+                                {/volist}
+                                </tbody>
+                            </table>
+                        </div><!-- /.span -->
+                    </div><!-- /.row -->
+                    <!-- PAGE CONTENT ENDS -->
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.page-content -->
+    </div>
+</div>
+{include file="public:footer" /}
+<script>
+    $(function(){
+        //删除
+        $('.del').click(function(){
+            var cid = $(this).attr('cid');
+            console.log(cid);
+            layer.msg('确定要删除该分类？',{
+                time:0,
+                btn:['确定','取消'],
+                yes:function (index) {
+                    layer.close(index);
+                    $.get("{:url('/admin/Menu/navDel/cid/"+ cid +"')}",function(data){
+                        if(data.code == 1)
+                        {
+                            layer.msg(data.msg);
+                            setTimeout(function(){
+                                window.location.href = data.url;
+                            },200);
+                        }else{
+                            layer.msg(data.msg);
+                        }
+                    },'json');
+                }
+            });
+        });
+    });
+</script>

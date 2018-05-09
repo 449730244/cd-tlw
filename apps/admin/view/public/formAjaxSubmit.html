@@ -1,0 +1,35 @@
+<script type="text/javascript">
+    function formAjaxSubmit(url)
+    {
+        var layer = layui.layer;
+        $('.submit').click(function(){
+            var fileForm = "<form id='formsubmit' action='" + url + "' method='post' enctype='multipart/form-data'></form>";
+            var inputs = $('#form');
+            inputs.wrap(fileForm);
+            $("#formsubmit").ajaxSubmit({
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    if(data.code == 1){
+                        layer.msg(data.msg);
+                        $(this).resetForm();
+                    }
+                    if(data.code == 0){
+                        layer.msg(data.msg);
+                        $(this).resetForm();
+                    }
+                    if(data.url && data.url!=''){
+                        setTimeout(function(){
+                            window.location.href=data.url;
+                        },500);
+                    }
+                    $(inputs).unwrap();
+                },
+                error:function() {
+                    $(inputs).unwrap();
+                }
+            });
+            return false;
+        });
+    }
+</script>

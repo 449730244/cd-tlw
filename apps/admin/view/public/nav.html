@@ -1,0 +1,37 @@
+<div id="sidebar" class="sidebar responsive ace-save-state">
+    <script type="text/javascript">
+        try{ace.settings.loadState('sidebar')}catch(e){}
+    </script>
+
+    <ul class="nav nav-list">
+        {volist name="menu" id="vo"}
+        <li>
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa {$vo.ico}"></i>
+                <span class="menu-text">{$vo.title}</span>
+                {notempty name="vo.child"}
+                  <b class="arrow fa fa-angle-down"></b>
+                {/notempty}
+            </a>
+            <b class="arrow"></b>
+            {notempty name="vo.child"}
+            <ul class="submenu">
+                {volist name="vo.child" id="v_c"}
+                <li>
+                    <a href="/{$v_c.name}" class="nav">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        {$v_c.title}
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                {/volist}
+            </ul>
+            {/notempty}
+        </li>
+        {/volist}
+    </ul>
+
+    <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+        <i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+    </div>
+</div>

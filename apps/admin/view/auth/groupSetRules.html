@@ -1,0 +1,115 @@
+{include file="public:header" /}
+{include file="public:nav" /}
+<div class="main-content">
+    <div class="main-content-inner">
+        <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+            <ul class="breadcrumb">
+                <li>
+                    <i class="ace-icon fa fa-home home-icon"></i>
+                    <a href="#">首页</a>
+                </li>
+
+                <li>
+                    <a href="#">权限管理</a>
+                </li>
+                <li class="active">设置权限</li>
+            </ul><!-- /.breadcrumb -->
+
+            <div class="nav-search" id="nav-search">
+                <form class="form-search">
+								<span class="input-icon">
+									<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
+									<i class="ace-icon fa fa-search nav-search-icon"></i>
+								</span>
+                </form>
+            </div><!-- /.nav-search -->
+        </div>
+
+        <div class="page-content">
+            <div class="page-header">
+                <h1>
+                    权限管理
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        设置权限
+                    </small>
+                </h1>
+            </div><!-- /.page-header -->
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- PAGE CONTENT BEGINS -->
+                    <div class="form-horizontal" role="form" id="form">
+                        <input type="hidden" name="gid" value="{$group.id}">
+                        <div class="form-group">
+                            <h3 style="text-align: center;">{$group.title}</h3>
+                        </div>
+                        <div class="form-group">
+                            <ul>
+                                {volist name="list" id="vo"}
+                                {empty name="vo._data"}
+                                <li class="li-check col-sm-12">
+                                    <label>
+                                        <input type="checkbox" value="{$vo.id}" name="rule_id[]" class="ace" {in name="$vo.id" value="$group.rules"} checked {/in}>
+                                        <span class="lbl">{$vo.title}</span>
+                                    </label>
+                                </li>
+                                {else /}
+                                <li class="li-check col-sm-12">
+                                    <label>
+                                        <input type="checkbox" value="{$vo.id}" name="rule_id[]" class="ace" {in name="$vo.id" value="$group.rules"} checked {/in}>
+                                        <span class="lbl">{$vo.title}</span>
+                                    </label>
+                                    <ul class="list-inline" style="margin-left: 13px;">
+                                        {volist name="vo._data" id="v"}
+                                        <li class="li-check">
+                                            <label>
+                                                <input type="checkbox" value="{$v.id}" name="rule_id[]" class="ace" {in name="$v.id" value="$group.rules"} checked {/in}>
+                                                <span class="lbl">{$v.title}</span>
+                                            </label>
+                                            <!--<ul class="list-inline" style="margin-left: 13px;">
+                                                {notempty name="v._data"}
+                                                {volist name="v._data" id="v_c"}
+                                                <li class="li-check">
+                                                    <label>
+                                                        <input type="checkbox" value="{$v_c.id}" name="rule_id[]" class="ace" {in name="$v_c.id" value="$group.rules"} checked {/in}>
+                                                        <span class="lbl">{$v_c.title}</span>
+                                                    </label>
+                                                </li>
+                                                {/volist}
+                                                {/notempty}
+                                            </ul>-->
+                                        </li>
+                                        {/volist}
+                                    </ul>
+                                </li>
+                                {/empty}
+                                {/volist}
+                            </ul>
+                        </div>
+                        <div class="col-sm-4 col-sm-offset-3">
+                            <button class="submit btn btn-info" type="button">提交</button>
+                        </div>
+                    </div>
+                    <!-- PAGE CONTENT ENDS -->
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.page-content -->
+    </div>
+</div>
+{include file="public:footer" /}
+<script type="text/javascript" src="__admin__/assets/iCheck/icheck.min.js"></script>
+{include file="public:formAjaxSubmit"}
+<script>
+    $(function () {
+        $('input').on('click',function () {
+            if($(this).parents('.li-check').eq(0).siblings().find("input[type='checkbox']").is(':checked') == false)
+            {
+                $(this).parents('.li-check').eq(1).find('label').eq(0).find("input[type='checkbox']").prop('checked', $(this).prop('checked'));
+                $(this).parents('.li-check').eq(2).find('label').eq(0).find("input[type='checkbox']").prop('checked', $(this).prop('checked'));
+            }
+            $(this).parents('.li-check').eq(0).find("input[type='checkbox']").prop('checked', $(this).prop('checked'));
+        });
+    });
+    formAjaxSubmit("{:url('Auth/groupSetRules')}");
+</script>

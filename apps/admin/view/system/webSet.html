@@ -1,0 +1,117 @@
+{include file="public:header" /}
+{include file="public:nav" /}
+<div class="main-content">
+    <div class="main-content-inner">
+        <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+            <ul class="breadcrumb">
+                <li>
+                    <i class="ace-icon fa fa-home home-icon"></i>
+                    <a href="#">首页</a>
+                </li>
+
+                <li>
+                    <a href="#">系统设置</a>
+                </li>
+                <li class="active">基本设置</li>
+            </ul><!-- /.breadcrumb -->
+
+            <div class="nav-search" id="nav-search">
+                <form class="form-search">
+								<span class="input-icon">
+									<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
+									<i class="ace-icon fa fa-search nav-search-icon"></i>
+								</span>
+                </form>
+            </div><!-- /.nav-search -->
+        </div>
+
+        <div class="page-content">
+            <div class="page-header">
+                <h1>
+                    系统设置
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        基本设置
+                    </small>
+                </h1>
+            </div><!-- /.page-header -->
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- PAGE CONTENT BEGINS -->
+                    <div class="form-horizontal" role="form" id="form">
+                        <input type="hidden" name="id" value="{$info['id']}"/>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" > 网站名称： </label>
+                            <div class="col-sm-4">
+                                <input type="text"  class="form-control" placeholder="网站名称" name="web_name" value="{$info['web_name']}"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" > 网站logo： </label>
+                            <div class="col-xs-4">
+                                <input type="file" id="input-file" name="logo"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" > 当前logo： </label>
+                            {notempty name="$info.logo"}
+                            <div class="col-xs-4">
+                                <label class="ace-file-input ace-file-multiple">
+                                   <span class="ace-file-container hide-placeholder selected">
+                                      <span class="ace-file-name" style="text-align: center;">
+                                            <img src="{$info['logo']}" class="middle" width="150px" height="115px"/>
+                                      </span>
+                                   </span>
+                                </label>
+                            </div>
+                            {/notempty}
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right"> 备案信息： </label>
+
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="icp_number" placeholder="备案信息" value="{$info['icp_number']}"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right"> 版权信息： </label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="cp_right" placeholder="版权信息" value="{$info['cp_right']}" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right"> 网站关键字： </label>
+                            <div class="col-sm-4">
+                                <textarea class="form-control" name="keyword"  placeholder="网站关键字">{$info['keyword']}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="clearfix form-actions">
+                            <div class="col-md-offset-3 col-md-9">
+                                <button class="submit btn btn-info" type="button">
+                                    <i class="ace-icon fa fa-check bigger-110"></i>
+                                    保存
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.page-content -->
+    </div>
+</div>
+{include file="public:footer" /}
+{include file="public:formAjaxSubmit"}
+<script>
+    $('#input-file').ace_file_input({
+        style: 'well',
+        btn_choose: '拖拽或点击上传',
+        btn_change: null,
+        no_icon: 'ace-icon fa fa-cloud-upload',
+        droppable: true,
+        thumbnail: 'large'
+    });
+    formAjaxSubmit("{:url('System/webSet')}");
+</script>

@@ -1,0 +1,152 @@
+{include file="public:header" /}
+{include file="public:nav" /}
+<div class="main-content">
+    <div class="main-content-inner">
+        <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+            <ul class="breadcrumb">
+                <li>
+                    <i class="ace-icon fa fa-home home-icon"></i>
+                    <a href="#">首页</a>
+                </li>
+
+                <li>
+                    <a href="#">权限管理</a>
+                </li>
+                <li class="active">权限列表</li>
+            </ul><!-- /.breadcrumb -->
+
+            <div class="nav-search" id="nav-search">
+                <form class="form-search">
+								<span class="input-icon">
+									<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
+									<i class="ace-icon fa fa-search nav-search-icon"></i>
+								</span>
+                </form>
+            </div><!-- /.nav-search -->
+        </div>
+
+        <div class="page-content">
+            <div class="page-header">
+                <h1>
+                    权限管理
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        权限列表
+                    </small>
+                </h1>
+            </div><!-- /.page-header -->
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- PAGE CONTENT BEGINS -->
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <table id="simple-table" class="table  table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>名称</th>
+                                    <th>权限</th>
+                                    <th>条件</th>
+                                    <th>菜单</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {volist name="list" id="vo"}
+                                <tr>
+                                    <td>{$vo._name}</td>
+                                    <td>{$vo.name}</td>
+                                    <td>
+                                        {if condition="$vo.condition eq ''"}
+                                        无
+                                        {else/}
+                                        {$vo.condition}
+                                        {/if}
+                                    </td>
+                                    <td>
+                                        {if condition="$vo.is_menu eq 1"}
+                                        是
+                                        {else/}
+                                        否
+                                        {/if}
+                                    </td>
+                                    <td>
+                                        <a href="{:url('Auth/ruleAdd',array('pid' => $vo.id))}" class="btn btn-sm btn-info">添加子权限</a>
+                                        <a href="{:url('Auth/ruleEdit',array('rid' => $vo.id))}" class="btn btn-sm btn-info">编辑</a>
+                                        {if condition="$vo.status eq 1"}
+                                        <a href="javascript:;" class="set_status btn btn-sm btn-info" rid="{$vo.id}" status="0">禁用</a>
+                                        {else/}
+                                        <a href="javascript:;" class="set_status btn btn-sm btn-info" rid="{$vo.id}" status="1">启用</a>
+                                        {/if}
+                                        <a href="javascript:;" class="del btn btn-sm btn-info" rid="{$vo.id}">删除</a>
+                                    </td>
+                                </tr>
+                                {/volist}
+                                </tbody>
+                            </table>
+                        </div><!-- /.span -->
+                    </div><!-- /.row -->
+                    <!-- PAGE CONTENT ENDS -->
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.page-content -->
+    </div>
+</div>
+{include file="public:footer" /}
+<script>
+    $(function(){
+        //删除供应商
+        $('.del').click(function(){
+            var rid = $(this).attr('rid');
+            console.log(rid);
+            layer.msg('确定要删除该权限？',{
+                time:0,
+                btn:['确定','取消'],
+                yes:function (index) {
+                    layer.close(index);
+                    $.get("{:url('/admin/Auth/ruleDel/rid/"+ rid +"')}",function(data){
+                        if(data.code == 1)
+                        {
+                            layer.msg(data.msg);
+                            setTimeout(function(){
+                                window.location.href = data.url;
+                            },200);
+                        }else{
+                            layer.msg(data.msg);
+                        }
+                    },'json');
+                }
+            });
+        });
+        //禁用/启用
+        $('.set_status').click(function(){
+            var rid = $(this).attr('rid');
+            var sta = $(this).attr('status');
+            var msg = '';
+            if(sta == 1)
+            {
+                msg = '确定要启用该用户组？';
+            }else{
+                msg = '确定要禁用该用户组？';
+            }
+            layer.msg(msg,{
+                time:0,
+                btn:['确定','取消'],
+                yes:function (index) {
+                    layer.close(index);
+                    $.get("{:url('/admin/Auth/ruleSetStatus/id/" + rid + "/sta/" + sta +"')}",function(data){
+                        if(data.code == 1)
+                        {
+                            layer.msg(data.msg);
+                            setTimeout(function(){
+                                window.location.href = data.url;
+                            },200);
+                        }else{
+                            layer.msg(data.msg);
+                        }
+                    },'json');
+                }
+            });
+        });
+    });
+</script>

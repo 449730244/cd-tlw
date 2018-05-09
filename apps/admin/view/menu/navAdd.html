@@ -1,0 +1,124 @@
+{include file="public:header" /}
+{include file="public:nav" /}
+<div class="main-content">
+    <div class="main-content-inner">
+        <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+            <ul class="breadcrumb">
+                <li>
+                    <i class="ace-icon fa fa-home home-icon"></i>
+                    <a href="#">首页</a>
+                </li>
+
+                <li>
+                    <a href="#">分类导航</a>
+                </li>
+                <li class="active">添加导航</li>
+            </ul><!-- /.breadcrumb -->
+
+            <div class="nav-search" id="nav-search">
+                <form class="form-search">
+								<span class="input-icon">
+									<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
+									<i class="ace-icon fa fa-search nav-search-icon"></i>
+								</span>
+                </form>
+            </div><!-- /.nav-search -->
+        </div>
+
+        <div class="page-content">
+            <div class="page-header">
+                <h1>
+                    分类导航
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        添加导航
+                    </small>
+                </h1>
+            </div><!-- /.page-header -->
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- PAGE CONTENT BEGINS -->
+                    <div class="form-horizontal" role="form" id="form">
+                        {notempty name="pid"}
+                        <input type="hidden" name="pid" value="{$pid}" />
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">父级分类:</label>
+                            <div class="col-sm-9">
+                                <input name="title" type="text" value="{$p_name}" class="col-xs-10 col-sm-5" disabled/>
+                            </div>
+                        </div>
+                        {/notempty}
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">分类名称:</label>
+                            <div class="col-sm-9">
+                                <input name="name" type="text" placeholder="请输入导航名称" class="col-xs-10 col-sm-5" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">分类链接:</label>
+                            <div class="col-sm-9">
+                                <input name="url" type="text" placeholder="请输入导航链接" class="col-xs-10 col-sm-5" />
+                            </div>
+                            <span class="help-block m-b-none col-sm-9" style="color: red;margin-bottom: 0px;">模块/控制器/操作,如:Admin/Index/index</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">排&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;序:</label>
+                            <div class="col-sm-9">
+                                <input name="sort" type="text" placeholder="0-255" value="0" class="col-xs-10 col-sm-5" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">菜单导航:</label>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="is_menu" value="1" class="ace" checked/>
+                                    <span class="lbl">是</span>
+                                </label>
+                                <label>
+                                    <input type="radio" name="is_menu" value="-1" class="ace" />
+                                    <span class="lbl">否</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">菜单分类:</label>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="is_cate" value="1" class="ace" checked/>
+                                    <span class="lbl">是</span>
+                                </label>
+                                <label>
+                                    <input type="radio" name="is_cate" value="-1" class="ace" />
+                                    <span class="lbl">否</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">是否显示:</label>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="status" value="1" class="ace" checked/>
+                                    <span class="lbl">是</span>
+                                </label>
+                                <label>
+                                    <input type="radio" name="status" value="-1" class="ace" />
+                                    <span class="lbl">否</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-sm-offset-3">
+                            <button class="submit btn btn-info" type="button">提交</button>
+                        </div>
+                    </div>
+                    <!-- PAGE CONTENT ENDS -->
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.page-content -->
+    </div>
+</div>
+{include file="public:footer" /}
+{include file="public:formAjaxSubmit"}
+<script>
+    formAjaxSubmit("{:url('Menu/navAdd')}");
+</script>
